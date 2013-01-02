@@ -286,7 +286,7 @@ PHP_FUNCTION(fstd_diff)
 	//difffst_(filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
 
 	RETURN_LONG(1);
-	//return;
+	//return; 
 
 }
 /* }}} */
