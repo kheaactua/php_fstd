@@ -1,0 +1,32 @@
+
+http://www.tuxradar.com/practicalphp/20/5/0
+
+Looking promissing, having issues with the extension not reloading.
+	- I even tried re-building PHP and renaming that function.. I don't get it
+
+Few things to keep in mind:
+export LDFLAGS="-L/opt/pgi/linux86-64/2012/libso"
+export LIBS="-lpgf90 -lpghpf2 -lpgf90rtl -lpgftnrtl -lpghpf_rpm -lpgc -lrt -lm"
+
+Set path:
+export PATH=/home/matt/fstd_php/bin:$PATH
+
+Command to test (build PHP before testing)
+phpize; ./configure --with-fstd; make; php -f fstd.php
+
+
+To build PHP (khea)
+export LDFLAGS="-L/home/matt/fstd_php/php-src/ext/fstd/lib -L/opt/pgi/linux86-64/2012/libso"
+export LIBS="-lrmn -lpgf90 -lpghpf2 -lpgf90rtl -lpgftnrtl -lpghpf_rpm -lpgc -lrt -lm"
+
+To build PHP (pontus)
+export LDFLAGS="-L/Users/matt/aurams/trunk/rmn -L/opt/pgi/osx86-64/2012/lib"
+export LIBS="-lrmn_local -lpgf90 -lpghpf2 -lpgf90rtl -lpgftnrtl -lpghpf_rpm -lpgc -lm"
+export CPPFLAGS="-I/Users/matt/aurams/trunk/web/php/php-src/main -I/Users/matt/aurams/trunk/web/php/php-src/Zend -I/Users/matt/aurams/trunk/web/php/php-src/TSRM -I/Users/matt/aurams/trunk/web/php/php-src"
+
+# TEMP
+export LDFLAGS="-L/Users/matt/aurams/trunk/utils/diffFst/ -L/Users/matt/aurams/trunk/rmn -L/opt/pgi/osx86-64/2012/lib"
+export LIBS="-lrmnutils -lrmn_local -lpgf90 -lpghpf2 -lpgf90rtl -lpgftnrtl -lpghpf_rpm -lpgc -lm"
+
+
+./configure --prefix=/home/matt/fstd_php/ --with-fstd; make; make install
