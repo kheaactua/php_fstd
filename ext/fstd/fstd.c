@@ -277,7 +277,8 @@ PHP_FUNCTION(fstd_diff)
 		RETURN_LONG(-100);
 	}
 
-	php_printf("Read arguments:\nfilA: %s, nomvara: %s\nfilB: %s, nomvarB: %s\nfilO: %s, nomvarO: %s\nMult: %0.3f\n", filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
+	php_printf("Read arguments:\nfilA: %s, nomvara: %s\nfilB: %s, nomvarB: %s\nfilO: %s, nomvarO: %s\nMult: %0.3f\n",
+	   filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
 
 // Maybe the issue is the returns?
 	//difffst_(filA,nomvarA, filB,nomvarB, filO,newnomvar, mult, 0);
