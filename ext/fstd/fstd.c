@@ -261,9 +261,11 @@ PHP_FUNCTION(fstd_diff)
 	char *newnomvar = NULL;
 	int nomvarA_len, nomvarB_len, newnomvar_len;
 
-	double mult;
+	int tictac=0, verbose=0;
+	float change;
 
 	int ier;
+	//char *space=" ";
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssssssd", 
 	   &filA, &filA_len,
@@ -272,20 +274,26 @@ PHP_FUNCTION(fstd_diff)
 	   &nomvarB, &nomvarB_len,
 	   &filO, &filO_len,
 	   &newnomvar, &newnomvar_len,
-	   &mult
+	   &change
 	   ) == FAILURE) {
 		RETURN_LONG(-100);
 	}
 
-	php_printf("Read arguments:\nfilA: %s, nomvara: %s\nfilB: %s, nomvarB: %s\nfilO: %s, nomvarO: %s\nMult: %0.3f\n",
-	   filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
+	// Probably have to do some check to make sure all nomvars are 4 chars long
+	// Can't just use strcat, because the variables doesn't have extra room.. Will
+	// have to pad it into another variable
 
-// Maybe the issue is the returns?
-	//difffst_(filA,nomvarA, filB,nomvarB, filO,newnomvar, mult, 0);
-	ier = difffst_(filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
-	//difffst_(filA,nomvarA, filB,nomvarB, filO,newnomvar, mult);
+	//php_printf("Read arguments:\nfilA: %s, nomvara: %s\nfilB: %s, nomvarB: %s\nfilO: %s, nomvarO: %s\nChange: %0.3f\n",
+	//   filA,nomvarA, filB,nomvarB, filO,newnomvar, change);
 
-	RETURN_LONG(1);
+	ier = diffFst_(filA,&filA_len,nomvarA,
+	   filB,&filB_len,nomvarB,
+	   filO,&filO_len,newnomvar,
+	   &change);
+//	   &change, &tictac, &verbose);
+
+
+	RETURN_LONG(ier);
 	//return; 
 
 }

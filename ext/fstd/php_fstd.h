@@ -45,6 +45,8 @@ PHP_MINFO_FUNCTION(fstd);
 PHP_FUNCTION(confirm_fstd_compiled);	/* For testing, remove later. */
 PHP_FUNCTION(fstd_print);
 PHP_FUNCTION(fstd_test);
+
+//int diffFst_(char*,int*,char*, char*,int*,char*, char*,int*,char*, float*, int*, int*);
 PHP_FUNCTION(fstd_diff);
 
 /* 
