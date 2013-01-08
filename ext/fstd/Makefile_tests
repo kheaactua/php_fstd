@@ -1,0 +1,36 @@
+# Include Makefile options
+include ~matt/aurams/trunk/include/Makefile.include
+
+.SUFFIXES: $(SUFFIXES) .f90 .c .mod
+
+.PHONY: all test clean lib
+
+# Source files
+SOURCES:=testFstd.c
+
+PGLIBS:=-lpgf90 -lpghpf2 -lpgf90rtl -lpgftnrtl -lpghpf_rpm
+
+# Object files
+OBJECTS:=$(SOURCES:.c=.o)
+
+EXES:=testFstd
+
+all: modules $(EXES)
+
+testFstd: ${OBJECTS}
+	pgcc ${F_debug_or_opt} -o $@ $^ $(LIBS) $(PGLIBS) -lm
+.c.o:
+	pgcc ${F_debug_or_opt} -c $<
+
+test:
+#	@echo "Normal doDiffFst"
+#	./doDiffFst tlm.fst o3_ bf10.fst o3_ sens.fst do3 1.1 true
+#	@echo " "
+#	@echo "Quiet doDiffFst"
+#	./quiet tlm.fst o3_ bf10.fst o3_ sens.fst do3 1.1 true
+	@echo " "
+	@echo "cDoDiffFst"
+	./cDoDiffFst
+
+clean:
+	rm -f $(LIB) $(OBJECTS)
