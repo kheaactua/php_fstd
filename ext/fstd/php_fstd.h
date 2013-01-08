@@ -46,8 +46,18 @@ PHP_FUNCTION(confirm_fstd_compiled);	/* For testing, remove later. */
 PHP_FUNCTION(fstd_print);
 PHP_FUNCTION(fstd_test);
 
-//int diffFst_(char*,int*,char*, char*,int*,char*, char*,int*,char*, float*, int*, int*);
+// Removed the last two values as they're optional
+int diffFst_(char*,int*,char*, char*,int*,char*, char*,int*,char*, float*);
 PHP_FUNCTION(fstd_diff);
+
+// Removed the last two values as they're optional
+int c_fnom(int, char*, char*, int);
+int c_fstouv(int, char*);
+int c_fstluk(float*, int, int*, int*, int*);
+int c_fstinf(int iun, int *ni, int *nj, int *nk, int datev,char *in_etiket, int ip1,int ip2,int ip3, char *in_typvar, char *in_nomvar);
+int c_fstfrm(int);
+int c_fclos(int);
+PHP_FUNCTION(fstd_readOne);
 
 /* 
   	Declare any global variables you may need between the BEGIN
