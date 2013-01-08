@@ -44,6 +44,7 @@ const zend_function_entry fstd_functions[] = {
 	PHP_FE(fstd_print,    NULL)
 	PHP_FE(fstd_test, NULL)
 	PHP_FE(fstd_diff, NULL)
+	PHP_FE(fstd_readOne, NULL)
 	PHP_FE_END	/* Must be the last line in fstd_functions[] */
 };
 /* }}} */
@@ -298,6 +299,126 @@ PHP_FUNCTION(fstd_diff)
 
 }
 /* }}} */
+
+
+/* {{{ proto void fstd_readOne(void)
+*  Open a file, and read the first record that matches */
+PHP_FUNCTION(fstd_readOne)
+{
+	int iun = 1;
+	int ier = 0;
+
+	int ni,nj,nk,key,i,j;
+
+	const int m1=-1; // a constant
+
+	char *fname = NULL;
+	int fname_len;
+
+	char *nomvar = NULL;
+	int nomvar_len;
+
+	int time; // ip2
+	int layer, ip1;
+
+	float** fld;
+	zval *afld, *arow;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssdd",
+	   &fname, &fname_len,
+	   &nomvar, &nomvar_len,
+	   &time, &layer
+	   ) == FAILURE) {
+		RETURN_LONG(-100);
+	}
+
+
+	// I should determine the layer through checking what layers there are
+	// and figuring out what the fifth is.. For now, I'll use this "reference"
+	// if block
+	if (layer == 1)  ip1 = 12001;
+	if (layer == 2)  ip1 = 12004;
+	if (layer == 3)  ip1 = 12012;
+	if (layer == 4)  ip1 = 12025;
+	if (layer == 5)  ip1 = 12040;
+	if (layer == 6)  ip1 = 12058;
+	if (layer == 7)  ip1 = 12079;
+	if (layer == 8)  ip1 = 12103;
+	if (layer == 9)  ip1 = 12131;
+	if (layer == 10) ip1 = 12164;
+	if (layer == 11) ip1 = 12203;
+	if (layer == 12) ip1 = 12248;
+	if (layer == 13) ip1 = 12301;
+	if (layer == 14) ip1 = 12363;
+	if (layer == 15) ip1 = 12435;
+	if (layer == 16) ip1 = 12519;
+	if (layer == 17) ip1 = 12618;
+	if (layer == 18) ip1 = 12733;
+	if (layer == 19) ip1 = 12868;
+	if (layer == 20) ip1 = 13026;
+
+	ier = c_fnom(iun, fname, "STD+RND", 1);
+	if (ier<0) {
+		php_printf("Could not open %s!\n", fname);
+		RETURN_LONG(ier);
+	}
+
+	ier = c_fstouv(iun, " ");
+	if (ier<0) {
+		php_printf("Could not open test.fst!\n");
+		RETURN_LONG(ier);
+	} else {
+		php_printf("test.fst open (with fstouv)!\n");
+	}
+
+	//                                 datev, etickt, ip1,ip2,ip3, typvar
+	//key = c_fstinf(iun, &ni, &nj, &nk, m1, "           ",m1,m1,m1," ", nomvar);
+	key = c_fstinf(iun, &ni, &nj, &nk, m1," ", ip1, time, m1, " ", nomvar);
+
+	/* Return ni,nj  Should be done be reference right now.. */
+	if (key<0) {
+		php_printf("Error, could not find key\n");
+	}
+	php_printf("nomvar=%s, ni=%d, nj=%d\n", nomvar, ni, nj);
+
+	// Allocate a field
+	fld = malloc(ni*sizeof(float*));
+	for (i=0; i<ni; i++) fld[i] = malloc(nj*sizeof(float));
+
+	// Read the field pointed by the given key
+	ier = c_fstluk(fld, key, &ni, &nj, &nk);
+
+	/* Close the file */
+	ier=c_fstfrm(iun);
+	ier=c_fclos(iun);
+
+	// Form an array to return
+	//ALLOC_INIT_ZVAL(return_value);
+	//Z_TYPE_P(return_value) = IS_ARRAY;
+	array_init(return_value);
+	add_assoc_long(return_value, "key", key);
+	add_assoc_long(return_value, "ni", ni);
+	add_assoc_long(return_value, "nj", nj);
+	
+	ALLOC_INIT_ZVAL(afld);
+	array_init(afld);
+
+	ALLOC_INIT_ZVAL(arow);
+
+	for (i=0; i<ni; i++) {
+		array_init(arow);
+		for (j=0; i<nj; i++) {
+			add_index_double(arow, j, fld[i][j]);
+		}
+		add_index_zval(afld, i, arow);
+	}
+
+	add_assoc_zval(return_value, "fld", afld);
+
+	//return return_value;
+}
+/* }}} */
+
 
 
 /*
