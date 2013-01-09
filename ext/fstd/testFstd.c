@@ -51,7 +51,6 @@ int main() {
 
 	// Allocate a field
 	fld = malloc(ni*nj*sizeof(float*));
-	//for (i=0; i<ni; i++) fld[i] = malloc(nj*sizeof(float));
 
 	// Read the field pointed by the given key
 	ier = c_fstluk(fld, key, &ni, &nj, &nk);

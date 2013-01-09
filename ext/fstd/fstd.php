@@ -19,7 +19,12 @@ if (extension_loaded($module)) {
 }
 echo "$str\n";
 
+//echo "Running:\n";
+//$arr=fstd_test('>>');
+//print "Result:\n";
+//print_r($arr);
+
 echo "Running:\n";
-$arr=fstd_test('>>');
+$arr=fstd_readOne('test.fst', 'o3_', 100, 1);
 print "Result:\n";
 print_r($arr);
