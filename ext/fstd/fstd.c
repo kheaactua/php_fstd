@@ -403,6 +403,7 @@ PHP_FUNCTION(fstd_readOne)
 	ier=c_fclos(iun);
 
 	// Form an array to return
+	//ALLOC_INIT_ZVAL(return_value);
 	array_init(return_value);
 	add_assoc_long(return_value, "key", key);
 	add_assoc_long(return_value, "ni", ni);
@@ -411,9 +412,12 @@ PHP_FUNCTION(fstd_readOne)
 	ALLOC_INIT_ZVAL(afld);
 	array_init(afld);
 
-	ALLOC_INIT_ZVAL(arow);
 
 	for (i=0; i<ni; i++) {
+		// Allocate a row
+		ALLOC_INIT_ZVAL(arow);
+
+		// Initialize the zval
 		array_init(arow);
 		for (j=0; j<nj; j++) {
 			add_index_double(arow, j, *(fld+(ni*j)+i));
