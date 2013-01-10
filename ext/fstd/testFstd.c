@@ -50,7 +50,7 @@ int main() {
 	printf("nomvar=%s, ni=%d, nj=%d\n", nomvar, ni, nj);
 
 	// Allocate a field
-	fld = malloc(ni*nj*sizeof(float*));
+	//!fld = malloc(ni*nj*sizeof(float*));
 
 	// Read the field pointed by the given key
 	ier = c_fstluk(fld, key, &ni, &nj, &nk);
@@ -69,4 +69,6 @@ int main() {
 		printf("\n");
 	}
 	printf("\nDone.\n");
+
+	//!free(fld);
 }
