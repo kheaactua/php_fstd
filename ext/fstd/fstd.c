@@ -392,7 +392,8 @@ PHP_FUNCTION(fstd_readOne)
 	php_printf("nomvar=%s, ni=%d, nj=%d\n", nomvar, ni, nj);
 
 	// Allocate a field
-	fld = emalloc(ni*nj*sizeof(float*));
+	//fld = emalloc(ni*nj*sizeof(float*));
+	fld = emalloc(ni*nj*sizeof(float));
 
 	// Read the field pointed by the given key
 	ier = c_fstluk(fld, key, &ni, &nj, &nk);
