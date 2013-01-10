@@ -305,6 +305,10 @@ PHP_FUNCTION(fstd_diff)
 *  Open a file, and read the first record that matches */
 PHP_FUNCTION(fstd_readOne)
 {
+
+	// http://docstore.mik.ua/orelly/webprog/php/index.htm
+	// O'Reilly's Programming PHP
+
 	int iun = 10;
 	int ier = 0;
 
@@ -388,7 +392,7 @@ PHP_FUNCTION(fstd_readOne)
 	php_printf("nomvar=%s, ni=%d, nj=%d\n", nomvar, ni, nj);
 
 	// Allocate a field
-	fld = emalloc(ni*nj*sizeof(float*));
+	//fld = emalloc(ni*nj*sizeof(float*));
 
 	// Read the field pointed by the given key
 	ier = c_fstluk(fld, key, &ni, &nj, &nk);
@@ -397,32 +401,41 @@ PHP_FUNCTION(fstd_readOne)
 	ier=c_fstfrm(iun);
 	ier=c_fclos(iun);
 
-	// Form an array to return
-	//ALLOC_INIT_ZVAL(return_value);
-	//Z_TYPE_P(return_value) = IS_ARRAY;
-	array_init(return_value);
-	add_assoc_long(return_value, "key", key);
-	add_assoc_long(return_value, "ni", ni);
-	add_assoc_long(return_value, "nj", nj);
-	
-	ALLOC_INIT_ZVAL(afld);
-	array_init(afld);
-
-	ALLOC_INIT_ZVAL(arow);
-
+	php_printf("\n");	
 	for (i=0; i<ni; i++) {
-		array_init(arow);
 		for (j=0; j<nj; j++) {
-			add_index_double(arow, j, *(fld+(ni*j)+i));
+			// Values come transposed..
+			php_printf("%15.6E", *(fld+(ni*j)+i));
+			if (j<nj-1) php_printf(", ");
 		}
-		add_index_zval(afld, i, arow);
+		php_printf("\n");
 	}
+	php_printf("\nDone.\n");
+	RETURN_LONG(0);
 
-	add_assoc_zval(return_value, "fld", afld);
 
-	efree(fld);
+//!	// Form an array to return
+//!	array_init(return_value);
+//!	add_assoc_long(return_value, "key", key);
+//!	add_assoc_long(return_value, "ni", ni);
+//!	add_assoc_long(return_value, "nj", nj);
+//!	
+//!	ALLOC_INIT_ZVAL(afld);
+//!	array_init(afld);
+//!
+//!	ALLOC_INIT_ZVAL(arow);
+//!
+//!	for (i=0; i<ni; i++) {
+//!		array_init(arow);
+//!		for (j=0; j<nj; j++) {
+//!			add_index_double(arow, j, *(fld+(ni*j)+i));
+//!		}
+//!		add_index_zval(afld, i, arow);
+//!	}
+//!
+//!	add_assoc_zval(return_value, "fld", afld);
 
-	//return return_value;
+	//efree(fld);
 }
 /* }}} */
 
